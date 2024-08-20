@@ -1,2 +1,26 @@
 
-node_modules
+
+# Node dependencies
+node_modules/
+
+# Next.js build output
+.next/
+
+# Vercel build output
+.vercel/
+
+# Linting/formatting tools
+.eslintcache
+.prettiercache
+
+# IDE-specific files
+.vscode/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Large media files (example)
+public/images/original/*
