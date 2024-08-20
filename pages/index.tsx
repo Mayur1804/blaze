@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   ChevronRight,
   Zap,
@@ -19,14 +19,27 @@ const LandingPage = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [isGamePurchased, setIsGamePurchased] = useState(false);
 
-  const handleWalletConnection = (address) => {
+  const handleWalletConnection = useCallback((address) => {
     setIsWalletConnected(address !== null);
     setWalletAddress(address || "");
-  };
+  }, []);
 
-  const handlePurchaseComplete = () => {
+  const handlePurchaseComplete = useCallback(() => {
     setIsGamePurchased(true);
-  };
+  }, []);
+
+  useEffect(() => {
+    const purchasedState = localStorage.getItem('isGamePurchased');
+    if (purchasedState === 'true') {
+      setIsGamePurchased(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('isGamePurchased', isGamePurchased.toString());
+  }, [isGamePurchased]);
+
+  
 
   const developers = [
     {
@@ -38,6 +51,9 @@ const LandingPage = () => {
       designation: "Game and Blockchain Developer",
     },
   ];
+
+
+  
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -174,21 +190,20 @@ const LandingPage = () => {
       </section>
 
       {/* Game Purchase Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <h2 className="text-4xl font-bold mb-4">
-          Ready to Join the BlazeFury Universe?
-        </h2>
-        <p className="text-xl mb-8">
-          {isGamePurchased
-            ? "Thank you for your purchase! You can now download the game."
-            : "Purchase the game now and start your adventure!"}
-        </p>
-        <GamePurchase
-          gamePrice={0.1}
-          receiverAddress="0x8fA9418ac26123438096Ec6B2D7eb2496B7c231C"
-          onPurchaseComplete={handlePurchaseComplete}
-        />
-      </section>
+    <section className="container mx-auto px-4 py-16 text-center">
+      <h2 className="text-4xl font-bold mb-4">Ready to Join the BlazeFury Universe?</h2>
+      <p className="text-xl mb-8">
+        {isGamePurchased
+          ? "Thank you for your purchase! You can now download the game."
+          : "Purchase the game now and start your adventure!"}
+      </p>
+      <GamePurchase
+        gamePrice={0.1}
+        receiverAddress="0x8fA9418ac26123438096Ec6B2D7eb2496B7c231C"
+        onPurchaseComplete={handlePurchaseComplete}
+        walletAddress={walletAddress}
+      />
+    </section>
 
       {/* Footer */}
       <footer className="bg-gray-800 py-8">
